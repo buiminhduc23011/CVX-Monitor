@@ -1,0 +1,9 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+  CVX-QLSX.App -> C:\Users\ducbu\Documents\GitHub\CVX-Monitor\CVX-QLSX.App\bin\Debug\net8.0-windows\CVX-QLSX.App.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.43

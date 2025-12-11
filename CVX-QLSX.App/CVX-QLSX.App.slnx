@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="CVX-QLSX.App.csproj" />
+  <Project Path="../CameraSimulator/CameraSimulator.csproj" />
+</Solution>

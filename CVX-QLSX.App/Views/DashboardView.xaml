@@ -1,0 +1,408 @@
+<UserControl x:Class="CVX_QLSX.App.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="900" d:DesignWidth="1200"
+             Background="#F5F5F5">
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Text="Giám sát Sản xuất" FontSize="28" FontWeight="Bold"
+                       Foreground="#1976D2" VerticalAlignment="Center"/>
+            
+            <!-- Plan Status -->
+            <Border Grid.Column="1" CornerRadius="8" Padding="14,8" Margin="20,0"
+                    VerticalAlignment="Center" HorizontalAlignment="Left">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="#FFF3E0"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasCurrentPlan}" Value="True">
+                                <Setter Property="Background" Value="#E3F2FD"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,8,0">
+                        <materialDesign:PackIcon.Style>
+                            <Style TargetType="materialDesign:PackIcon">
+                                <Setter Property="Kind" Value="AlertCircleOutline"/>
+                                <Setter Property="Foreground" Value="#E65100"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasCurrentPlan}" Value="True">
+                                        <Setter Property="Kind" Value="PlayCircle"/>
+                                        <Setter Property="Foreground" Value="#1976D2"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </materialDesign:PackIcon.Style>
+                    </materialDesign:PackIcon>
+                    <TextBlock FontWeight="Medium" VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="Chưa có kế hoạch"/>
+                                <Setter Property="Foreground" Value="#E65100"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasCurrentPlan}" Value="True">
+                                        <Setter Property="Text" Value="{Binding CurrentPlanStatusText}"/>
+                                        <Setter Property="Foreground" Value="#1565C0"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+            
+            <!-- Connection -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <Ellipse Width="12" Height="12" Margin="0,0,8,0">
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse">
+                            <Setter Property="Fill" Value="#E53935"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                    <Setter Property="Fill" Value="#43A047"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <TextBlock Text="{Binding ConnectionStatus}" Foreground="#666" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding ConnectCommand}"
+                        Visibility="{Binding IsConnected, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                        Content="Kết nối" Padding="16,6" Height="36"/>
+                <Button Style="{StaticResource MaterialDesignOutlinedSecondaryButton}"
+                        Command="{Binding DisconnectCommand}"
+                        Visibility="{Binding IsConnected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Content="Ngắt" Padding="16,6" Height="36"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Stats Cards -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <materialDesign:Card Grid.Column="0" UniformCornerRadius="12" Margin="0,0,6,0"
+                                 Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Background="#E3F2FD" CornerRadius="6" Padding="6">
+                            <materialDesign:PackIcon Kind="Target" Width="20" Height="20" Foreground="#1976D2"/>
+                        </Border>
+                        <TextBlock Margin="10,0,0,0" Text="SL ĐẶT" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Margin="0,10,0,0" Text="{Binding TargetQuantity, StringFormat=N0}"
+                               FontSize="32" FontWeight="Bold" Foreground="#1976D2" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Grid.Column="1" UniformCornerRadius="12" Margin="6,0,6,0"
+                                 Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Background="#E8F5E9" CornerRadius="6" Padding="6">
+                            <materialDesign:PackIcon Kind="CheckCircle" Width="20" Height="20" Foreground="#43A047"/>
+                        </Border>
+                        <TextBlock Margin="10,0,0,0" Text="SL ĐẠT" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Margin="0,10,0,0" Text="{Binding OkCount, StringFormat=N0}"
+                               FontSize="32" FontWeight="Bold" Foreground="#43A047" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Grid.Column="2" UniformCornerRadius="12" Margin="6,0,6,0"
+                                 Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Background="#FFEBEE" CornerRadius="6" Padding="6">
+                            <materialDesign:PackIcon Kind="CloseCircle" Width="20" Height="20" Foreground="#E53935"/>
+                        </Border>
+                        <TextBlock Margin="10,0,0,0" Text="SL NG" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Margin="0,10,0,0" Text="{Binding NgCount, StringFormat=N0}"
+                               FontSize="32" FontWeight="Bold" Foreground="#E53935" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Grid.Column="3" UniformCornerRadius="12" Margin="6,0,0,0"
+                                 Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Background="#F3E5F5" CornerRadius="6" Padding="6">
+                            <materialDesign:PackIcon Kind="Percent" Width="20" Height="20" Foreground="#8E24AA"/>
+                        </Border>
+                        <TextBlock Margin="10,0,0,0" Text="% ĐẠT" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Margin="0,10,0,0" FontSize="32" FontWeight="Bold" Foreground="#8E24AA" HorizontalAlignment="Center">
+                        <Run Text="{Binding YieldRate, StringFormat=F1}"/><Run Text="%"/>
+                    </TextBlock>
+                </StackPanel>
+            </materialDesign:Card>
+        </Grid>
+
+        <!-- Progress + Add Form -->
+        <Grid Grid.Row="2" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Doughnut Chart -->
+            <materialDesign:Card Grid.Column="0" UniformCornerRadius="12" Margin="0,0,8,0"
+                                 Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="200"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Text="Tiến độ" FontSize="20" FontWeight="SemiBold" Foreground="#333"/>
+                    
+                    <Grid Grid.Row="1">
+                        <lvc:PieChart Series="{Binding DoughnutSeries}"
+                                      InitialRotation="-90" TooltipPosition="Hidden"/>
+                        <TextBlock Text="{Binding ProgressText}" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                   FontSize="28" FontWeight="Bold" Foreground="#1976D2"/>
+                    </Grid>
+                    
+                    <Grid Grid.Row="2" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Đã SX" Foreground="#888"/>
+                            <TextBlock Text="{Binding TotalCount, StringFormat=N0}" FontWeight="Bold" FontSize="20" Foreground="#1976D2"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                            <TextBlock Text="Mục tiêu" Foreground="#888" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding TargetQuantity, StringFormat=N0}" FontWeight="Bold" FontSize="20" Foreground="#333" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Add Plan Form -->
+            <materialDesign:Card Grid.Column="1" UniformCornerRadius="12" Margin="8,0,0,0"
+                                 Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <Grid VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <TextBlock Text="Thêm Kế hoạch" FontSize="20" FontWeight="SemiBold" Foreground="#333"/>
+                        <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Command="{Binding StopPlanCommand}"
+                                CommandParameter="{Binding CurrentPlan}"
+                                Visibility="{Binding HasCurrentPlan, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Content="Hoàn thành KH" Margin="16,0,0,0" Padding="12,4" Height="32"/>
+                    </StackPanel>
+                    
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox Grid.Column="0"
+                                  materialDesign:HintAssist.Hint="Sản phẩm"
+                                  materialDesign:HintAssist.IsFloating="True"
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  IsEditable="True"
+                                  Text="{Binding NewPlanProduct, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding SelectedProduct}"
+                                  ItemsSource="{Binding FilteredProducts}"
+                                  Margin="0,0,10,0"/>
+
+                        <Border Grid.Column="1" BorderBrush="#1976D2" BorderThickness="1" CornerRadius="4" Margin="0,0,10,0" Height="50">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" Content="−" 
+                                        Command="{Binding DecrementQuantityCommand}" 
+                                        FontSize="24" FontWeight="Bold" Foreground="#1976D2"
+                                        Background="Transparent" BorderThickness="0"
+                                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                                <TextBox Grid.Column="1" Height="50" Text="{Binding NewPlanQuantity, UpdateSourceTrigger=PropertyChanged}"
+                                         BorderThickness="0" TextAlignment="Center" VerticalContentAlignment="Center"
+                                         FontSize="18" FontWeight="SemiBold" Background="Transparent"/>
+                                <Button Grid.Column="2" Content="+" 
+                                        Command="{Binding IncrementQuantityCommand}" 
+                                        FontSize="24" FontWeight="Bold" Foreground="#1976D2"
+                                        Background="Transparent" BorderThickness="0"
+                                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                            </Grid>
+                        </Border>
+
+                        <Button Grid.Column="2"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                                Command="{Binding AddPlanCommand}" ToolTip="Thêm" Width="40" Height="40">
+                            <materialDesign:PackIcon Kind="Plus" Width="24" Height="24"/>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+
+        <!-- Plan History Table -->
+        <materialDesign:Card Grid.Row="3" UniformCornerRadius="12"
+                             Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Danh sách Kế hoạch" FontSize="20" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,12"/>
+
+                <DataGrid Grid.Row="1"
+                          ItemsSource="{Binding AllPlans}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          Style="{StaticResource MaterialDesignDataGrid}"
+                          materialDesign:DataGridAssist.CellPadding="14 10"
+                          materialDesign:DataGridAssist.ColumnHeaderPadding="14 10"
+                          HeadersVisibility="Column"
+                          GridLinesVisibility="Horizontal">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="STT" Width="80" IsReadOnly="True"
+                                            Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
+                                            Converter={StaticResource RowNumberConverter}}"/>
+                        <DataGridTextColumn Header="Sản phẩm" Binding="{Binding ProductName}" Width="*" IsReadOnly="True"/>
+                        <DataGridTemplateColumn Header="SL Đặt" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding TargetQuantity, StringFormat=N0}" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding TargetQuantity, UpdateSourceTrigger=LostFocus}">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                        <Setter Property="IsReadOnly" Value="True"/>
+                                                        <Setter Property="Foreground" Value="Gray"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Cancelled">
+                                                        <Setter Property="IsReadOnly" Value="True"/>
+                                                        <Setter Property="Foreground" Value="Gray"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Thực tế" FontSize="18" Binding="{Binding CurrentQuantity, StringFormat=N0, Mode=TwoWay}" Width="100" IsReadOnly="True"/>
+                        <DataGridTemplateColumn Header="Trạng thái" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="4" Padding="8,4" HorizontalAlignment="Left">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#E0E0E0"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Running">
+                                                        <Setter Property="Background" Value="#1976D2"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                        <Setter Property="Background" Value="#43A047"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Cancelled">
+                                                        <Setter Property="Background" Value="#E53935"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock FontWeight="Medium">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="Chờ"/>
+                                                    <Setter Property="Foreground" Value="#666"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Running">
+                                                            <Setter Property="Text" Value="Đang chạy"/>
+                                                            <Setter Property="Foreground" Value="White"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                            <Setter Property="Text" Value="Hoàn thành"/>
+                                                            <Setter Property="Foreground" Value="White"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Cancelled">
+                                                            <Setter Property="Text" Value="Đã hủy"/>
+                                                            <Setter Property="Foreground" Value="White"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding DataContext.StopPlanCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Foreground="#E53935" Width="28" Height="28" Padding="0" ToolTip="Dừng">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignIconButton}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Cancelled">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <materialDesign:PackIcon Kind="Stop" Width="18" Height="18"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</UserControl>
