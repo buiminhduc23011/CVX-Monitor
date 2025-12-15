@@ -53,7 +53,7 @@ public class CounterService
             // This ensures when new plan starts with camera at 45, 
             // we only count the DELTA (e.g., 45->46 = 1 item)
             _lastCameraTotal = packet.TotalCount;
-            _lastCameraOK = packet.OKCount;
+            _lastCameraOK = packet.OKCount-1;
             _lastCameraNG = packet.NGCount;
             _isFirstPacket = false;
             

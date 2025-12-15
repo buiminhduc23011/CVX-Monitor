@@ -117,8 +117,8 @@
                         </Border>
                         <TextBlock Margin="10,0,0,0" Text="SL ĐẶT" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <TextBlock Margin="0,10,0,0" Text="{Binding TargetQuantity, StringFormat=N0}"
-                               FontSize="32" FontWeight="Bold" Foreground="#1976D2" HorizontalAlignment="Center"/>
+                    <TextBlock Margin="0,30,0,0" Text="{Binding TargetQuantity, StringFormat=N0}"
+                               FontSize="80" FontWeight="Bold" Foreground="#1976D2" HorizontalAlignment="Center"/>
                 </StackPanel>
             </materialDesign:Card>
 
@@ -131,8 +131,8 @@
                         </Border>
                         <TextBlock Margin="10,0,0,0" Text="SL ĐẠT" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <TextBlock Margin="0,10,0,0" Text="{Binding OkCount, StringFormat=N0}"
-                               FontSize="32" FontWeight="Bold" Foreground="#43A047" HorizontalAlignment="Center"/>
+                    <TextBlock Margin="0,30,0,0" Text="{Binding OkCount, StringFormat=N0}"
+                               FontSize="80" FontWeight="Bold" Foreground="#43A047" HorizontalAlignment="Center"/>
                 </StackPanel>
             </materialDesign:Card>
 
@@ -145,12 +145,12 @@
                         </Border>
                         <TextBlock Margin="10,0,0,0" Text="SL NG" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <TextBlock Margin="0,10,0,0" Text="{Binding NgCount, StringFormat=N0}"
-                               FontSize="32" FontWeight="Bold" Foreground="#E53935" HorizontalAlignment="Center"/>
+                    <TextBlock Margin="0,30,0,0" Text="{Binding NgCount, StringFormat=N0}"
+                               FontSize="80" FontWeight="Bold" Foreground="#E53935" HorizontalAlignment="Center"/>
                 </StackPanel>
             </materialDesign:Card>
 
-            <materialDesign:Card Grid.Column="3" UniformCornerRadius="12" Margin="6,0,0,0"
+            <!--<materialDesign:Card Grid.Column="3" UniformCornerRadius="12" Margin="6,0,0,0"
                                  Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
@@ -159,22 +159,45 @@
                         </Border>
                         <TextBlock Margin="10,0,0,0" Text="% ĐẠT" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <TextBlock Margin="0,10,0,0" FontSize="32" FontWeight="Bold" Foreground="#8E24AA" HorizontalAlignment="Center">
+                    <TextBlock Margin="0,10,0,0" FontSize="80" FontWeight="Bold" Foreground="#8E24AA" HorizontalAlignment="Center">
                         <Run Text="{Binding YieldRate, StringFormat=F1}"/><Run Text="%"/>
                     </TextBlock>
                 </StackPanel>
+            </materialDesign:Card>-->
+            <!-- Doughnut Chart -->
+            <materialDesign:Card Grid.Column="3" UniformCornerRadius="12" Margin="8,0,0,0"
+                              Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Tiến độ" FontSize="20" FontWeight="SemiBold" Foreground="#333"/>
+
+                    <Grid Grid.Row="1">
+                        <lvc:PieChart Series="{Binding DoughnutSeries}"
+                                   InitialRotation="-90" TooltipPosition="Hidden"/>
+                        <TextBlock Text="{Binding ProgressText}" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                FontSize="35" FontWeight="Bold" Foreground="#1976D2"/>
+                    </Grid>
+
+                   
+                </Grid>
             </materialDesign:Card>
+
         </Grid>
 
         <!-- Progress + Add Form -->
         <Grid Grid.Row="2" Margin="0,0,0,16">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Doughnut Chart -->
-            <materialDesign:Card Grid.Column="0" UniformCornerRadius="12" Margin="0,0,8,0"
+            <!--<materialDesign:Card Grid.Column="0" UniformCornerRadius="12" Margin="0,0,8,0"
                                  Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -207,11 +230,11 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
-            </materialDesign:Card>
+            </materialDesign:Card>-->
 
             <!-- Add Plan Form -->
-            <materialDesign:Card Grid.Column="1" UniformCornerRadius="12" Margin="8,0,0,0"
-                                 Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+            <materialDesign:Card Grid.Column="1" UniformCornerRadius="12" Margin="0,0,0,0"
+                                 Padding="16 10 16 10" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
                 <Grid VerticalAlignment="Center">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -220,11 +243,11 @@
                     
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
                         <TextBlock Text="Thêm Kế hoạch" FontSize="20" FontWeight="SemiBold" Foreground="#333"/>
-                        <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                        <!--<Button Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Command="{Binding StopPlanCommand}"
                                 CommandParameter="{Binding CurrentPlan}"
                                 Visibility="{Binding HasCurrentPlan, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                Content="Hoàn thành KH" Margin="16,0,0,0" Padding="12,4" Height="32"/>
+                                Content="Hoàn thành KH" Margin="16,0,0,0" Padding="12,4" Height="32"/>-->
                     </StackPanel>
                     
                     <Grid Grid.Row="1">
@@ -279,7 +302,7 @@
 
         <!-- Plan History Table -->
         <materialDesign:Card Grid.Row="3" UniformCornerRadius="12"
-                             Padding="16" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                             Padding="10" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -293,17 +316,18 @@
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           CanUserDeleteRows="False"
+                          FontSize="20"
                           Style="{StaticResource MaterialDesignDataGrid}"
                           materialDesign:DataGridAssist.CellPadding="14 10"
                           materialDesign:DataGridAssist.ColumnHeaderPadding="14 10"
                           HeadersVisibility="Column"
                           GridLinesVisibility="Horizontal">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="STT" Width="80" IsReadOnly="True"
+                        <!--<DataGridTextColumn Header="STT" Width="80" IsReadOnly="True"
                                             Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
-                                            Converter={StaticResource RowNumberConverter}}"/>
+                                            Converter={StaticResource RowNumberConverter}}"/>-->
                         <DataGridTextColumn Header="Sản phẩm" Binding="{Binding ProductName}" Width="*" IsReadOnly="True"/>
-                        <DataGridTemplateColumn Header="SL Đặt" Width="100">
+                        <DataGridTemplateColumn Header="SL Đặt" Width="200">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding TargetQuantity, StringFormat=N0}" VerticalAlignment="Center"/>
@@ -330,11 +354,11 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="Thực tế" FontSize="18" Binding="{Binding CurrentQuantity, StringFormat=N0, Mode=TwoWay}" Width="100" IsReadOnly="True"/>
-                        <DataGridTemplateColumn Header="Trạng thái" Width="120">
+                        <DataGridTextColumn Header="Thực tế" FontSize="18" Binding="{Binding CurrentQuantity, StringFormat=N0, Mode=TwoWay}" Width="200" IsReadOnly="True"/>
+                        <DataGridTemplateColumn Header="Trạng thái" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Border CornerRadius="4" Padding="8,4" HorizontalAlignment="Left">
+                                    <Border CornerRadius="4" Padding="8,4" HorizontalAlignment="Left" Width="120">
                                         <Border.Style>
                                             <Style TargetType="Border">
                                                 <Setter Property="Background" Value="#E0E0E0"/>
@@ -351,7 +375,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </Border.Style>
-                                        <TextBlock FontWeight="Medium">
+                                        <TextBlock FontWeight="Medium" HorizontalAlignment="Center">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Setter Property="Text" Value="Chờ"/>
@@ -377,14 +401,15 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="" Width="80">
+                        <DataGridTemplateColumn Header="" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Command="{Binding DataContext.StopPlanCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             CommandParameter="{Binding}"
-                                            Foreground="#E53935" Width="28" Height="28" Padding="0" ToolTip="Dừng">
+                                            Background="#E53935"  Content="Dừng">
                                         <Button.Style>
-                                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignIconButton}">
+                                            <Style TargetType="Button" >
+                                         
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding Status}" Value="Completed">
                                                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -395,7 +420,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </Button.Style>
-                                        <materialDesign:PackIcon Kind="Stop" Width="18" Height="18"/>
+                                      
                                     </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

@@ -333,7 +333,7 @@ public partial class DashboardViewModel : ViewModelBase
 
             if (CurrentPlan != null)
             {
-                CurrentPlan.CurrentQuantity = e.Total;
+                CurrentPlan.CurrentQuantity = e.OK;
                 System.Diagnostics.Debug.WriteLine($"[Dashboard] Updated CurrentPlan.CurrentQuantity to {CurrentPlan.CurrentQuantity}");
                 
                 // Save to database periodically (every update)

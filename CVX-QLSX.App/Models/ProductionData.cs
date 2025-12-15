@@ -2,7 +2,8 @@ namespace CVX_QLSX.App.Models;
 
 /// <summary>
 /// Parsed production data from TCP camera stream.
-/// Format: TotalCount,OKCount,NGCount,ProductID,MfgDate,ExpDate
+/// Format: TotalCount,OKCount,NGCount,ProductID
+/// MfgDate is automatically set to today's date.
 /// </summary>
 public class ProductionData
 {
@@ -15,7 +16,8 @@ public class ProductionData
 
     /// <summary>
     /// Parses a CSV string from the camera into ProductionData.
-    /// Expected format: "TotalCount,OKCount,NGCount,ProductID,MfgDate,ExpDate"
+    /// Expected format: "TotalCount,OKCount,NGCount,ProductID"
+    /// MfgDate is automatically set to today's date in yyyy-MM-dd format.
     /// </summary>
     public static bool TryParse(string csvData, out ProductionData? result)
     {
@@ -25,7 +27,7 @@ public class ProductionData
             return false;
 
         var parts = csvData.Trim().Split(',');
-        if (parts.Length != 6)
+        if (parts.Length != 4)
             return false;
 
         if (!int.TryParse(parts[0], out int total) ||
@@ -41,8 +43,8 @@ public class ProductionData
             OKCount = ok,
             NGCount = ng,
             ProductId = parts[3].Trim(),
-            MfgDate = parts[4].Trim(),
-            ExpDate = parts[5].Trim()
+            MfgDate = DateTime.Now.ToString("yyyy-MM-dd"),
+            ExpDate = string.Empty
         };
 
         return true;
