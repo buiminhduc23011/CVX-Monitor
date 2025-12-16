@@ -262,12 +262,13 @@
                                   materialDesign:HintAssist.IsFloating="True"
                                   Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                   IsEditable="True"
+                                  
                                   Text="{Binding NewPlanProduct, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedItem="{Binding SelectedProduct}"
                                   ItemsSource="{Binding FilteredProducts}"
                                   Margin="0,0,10,0"/>
 
-                        <Border Grid.Column="1" BorderBrush="#1976D2" BorderThickness="1" CornerRadius="4" Margin="0,0,10,0" Height="50">
+                        <Border Grid.Column="1"  BorderBrush="#1976D2" BorderThickness="1" CornerRadius="4" Margin="0,0,10,0" Height="65">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50"/>
@@ -276,15 +277,15 @@
                                 </Grid.ColumnDefinitions>
                                 <Button Grid.Column="0" Content="−" 
                                         Command="{Binding DecrementQuantityCommand}" 
-                                        FontSize="24" FontWeight="Bold" Foreground="#1976D2"
+                                        FontSize="30" FontWeight="Bold" Foreground="#1976D2"
                                         Background="Transparent" BorderThickness="0"
                                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-                                <TextBox Grid.Column="1" Height="50" Text="{Binding NewPlanQuantity, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Grid.Column="1" Height="65" Text="{Binding NewPlanQuantity, UpdateSourceTrigger=PropertyChanged}"
                                          BorderThickness="0" TextAlignment="Center" VerticalContentAlignment="Center"
-                                         FontSize="18" FontWeight="SemiBold" Background="Transparent"/>
+                                         FontSize="24" FontWeight="SemiBold" Background="Transparent"/>
                                 <Button Grid.Column="2" Content="+" 
                                         Command="{Binding IncrementQuantityCommand}" 
-                                        FontSize="24" FontWeight="Bold" Foreground="#1976D2"
+                                        FontSize="30" FontWeight="Bold" Foreground="#1976D2"
                                         Background="Transparent" BorderThickness="0"
                                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                             </Grid>

@@ -36,179 +36,180 @@
     </Window.Resources>
 
     <materialDesign:DialogHost Identifier="RootDialog">
-    <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
-        <!--  Navigation Drawer (Sidebar)  -->
-        <materialDesign:DrawerHost.LeftDrawerContent>
-            <DockPanel MinWidth="280">
-                <!--  Drawer Header  -->
-                <Border
-                    Padding="24"
-                    Background="{DynamicResource PrimaryHueMidBrush}"
-                    DockPanel.Dock="Top">
+        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+            <!--  Navigation Drawer (Sidebar)  -->
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel MinWidth="280">
+                    <!--  Drawer Header  -->
+                    <Border
+                        Padding="24"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        DockPanel.Dock="Top">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Image
+                                Width="100"
+                                Height="64"
+                                HorizontalAlignment="Center"
+                                Source="/Assets/Logo_Company.png"
+                                Stretch="Uniform" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Margin="0,16,0,0"
+                                HorizontalAlignment="Center"
+                                FontSize="18"
+                                FontWeight="Medium"
+                                Foreground="Black"
+                                Text="STI-CVX Production" />
+                        </Grid>
+                    </Border>
+
+                    <!--  Menu Items  -->
+                    <ListBox
+                        x:Name="MenuListBox"
+                        Margin="0,16,0,0"
+                        SelectedIndex="{Binding SelectedMenuIndex}">
+                        <ListBox.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource MaterialDesignListBoxItem}" TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="24,16" />
+                                <Setter Property="Cursor" Value="Hand" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBoxItem Tag="Dashboard">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonUp">
+                                    <i:InvokeCommandAction Command="{Binding NavigateToDashboardCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    VerticalAlignment="Center"
+                                    Kind="ViewDashboard" />
+                                <TextBlock
+                                    Margin="24,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Dashboard" />
+                            </StackPanel>
+                        </ListBoxItem>
+
+                        <ListBoxItem Tag="Reports">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonUp">
+                                    <i:InvokeCommandAction Command="{Binding NavigateToReportCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    VerticalAlignment="Center"
+                                    Kind="ChartBar" />
+                                <TextBlock
+                                    Margin="24,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Báo cáo" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <!--  Login item - visible when NOT authenticated  -->
+                        <ListBoxItem Tag="Login" Visibility="{Binding IsAuthenticated, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonUp">
+                                    <i:InvokeCommandAction Command="{Binding ShowLoginCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    VerticalAlignment="Center"
+                                    Kind="Login" />
+                                <TextBlock
+                                    Margin="24,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Đăng nhập quản trị" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <!--  Settings - visible when authenticated  -->
+                        <ListBoxItem Tag="Settings" Visibility="{Binding IsAuthenticated, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonUp">
+                                    <i:InvokeCommandAction Command="{Binding NavigateToSettingsCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    VerticalAlignment="Center"
+                                    Kind="Cog" />
+                                <TextBlock
+                                    Margin="24,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Cài đặt" />
+                            </StackPanel>
+                        </ListBoxItem>
+                    </ListBox>
+                </DockPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+
+            <!--  Main Content Area  -->
+            <DockPanel>
+                <!--  Top AppBar  -->
+                <materialDesign:ColorZone
+                    Padding="16"
+                    materialDesign:ElevationAssist.Elevation="Dp4"
+                    DockPanel.Dock="Top"
+                    Mode="PrimaryMid">
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                        <Image
-                            Width="100"
-                            Height="64"
-                            HorizontalAlignment="Center"
-                            Source="/Assets/Logo_Company.png"
-                            Stretch="Uniform" />
+                        <!--  Menu Toggle Button  -->
+                        <ToggleButton
+                            x:Name="MenuToggleButton"
+                            IsChecked="False"
+                            Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
+
+                        <!--  Title  -->
                         <TextBlock
-                            Grid.Row="1"
-                            Margin="0,16,0,0"
+                            Grid.Column="1"
                             HorizontalAlignment="Center"
-                            FontSize="18"
+                            VerticalAlignment="Center"
+                            FontSize="28"
                             FontWeight="Medium"
-                            Foreground="Black"
-                            Text="STI-CVX Production" />
+                            Foreground="White"
+                            Text="{Binding CurrentView.Title}" />
+
+                        <!--  Time Display  -->
+                        <TextBlock
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            Foreground="White"
+                            Opacity="0.8"
+                            Text="{Binding CurrentDateTime}" />
                     </Grid>
-                </Border>
+                </materialDesign:ColorZone>
 
-                <!--  Menu Items  -->
-                <ListBox
-                    x:Name="MenuListBox"
-                    Margin="0,16,0,0"
-                    SelectedIndex="{Binding SelectedMenuIndex}">
-                    <ListBox.ItemContainerStyle>
-                        <Style BasedOn="{StaticResource MaterialDesignListBoxItem}" TargetType="ListBoxItem">
-                            <Setter Property="Padding" Value="24,16" />
-                            <Setter Property="Cursor" Value="Hand" />
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBoxItem Tag="Dashboard">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonUp">
-                                <i:InvokeCommandAction Command="{Binding NavigateToDashboardCommand}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="24"
-                                Height="24"
-                                VerticalAlignment="Center"
-                                Kind="ViewDashboard" />
-                            <TextBlock
-                                Margin="24,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="14"
-                                Text="Dashboard" />
-                        </StackPanel>
-                    </ListBoxItem>
-
-                    <ListBoxItem Tag="Reports">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonUp">
-                                <i:InvokeCommandAction Command="{Binding NavigateToReportCommand}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="24"
-                                Height="24"
-                                VerticalAlignment="Center"
-                                Kind="ChartBar" />
-                            <TextBlock
-                                Margin="24,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="14"
-                                Text="Báo cáo" />
-                        </StackPanel>
-                    </ListBoxItem>
-                    <!-- Login item - visible when NOT authenticated -->
-                    <ListBoxItem Tag="Login" Visibility="{Binding IsAuthenticated, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonUp">
-                                <i:InvokeCommandAction Command="{Binding ShowLoginCommand}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="24"
-                                Height="24"
-                                VerticalAlignment="Center"
-                                Kind="Login" />
-                            <TextBlock
-                                Margin="24,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="14"
-                                Text="Đăng nhập quản trị" />
-                        </StackPanel>
-                    </ListBoxItem>
-                    <!-- Settings - visible when authenticated -->
-                    <ListBoxItem Tag="Settings" Visibility="{Binding IsAuthenticated, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonUp">
-                                <i:InvokeCommandAction Command="{Binding NavigateToSettingsCommand}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="24"
-                                Height="24"
-                                VerticalAlignment="Center"
-                                Kind="Cog" />
-                            <TextBlock
-                                Margin="24,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="14"
-                                Text="Cài đặt" />
-                        </StackPanel>
-                    </ListBoxItem>
-                </ListBox>
-            </DockPanel>
-        </materialDesign:DrawerHost.LeftDrawerContent>
-
-        <!--  Main Content Area  -->
-        <DockPanel>
-            <!--  Top AppBar  -->
-            <materialDesign:ColorZone
-                Padding="16"
-                materialDesign:ElevationAssist.Elevation="Dp4"
-                DockPanel.Dock="Top"
-                Mode="PrimaryMid">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <!--  Menu Toggle Button  -->
-                    <ToggleButton
-                        x:Name="MenuToggleButton"
-                        IsChecked="False"
-                        Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
-
-                    <!--  Title  -->
-                    <TextBlock
-                        Grid.Column="1"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontSize="30"
-                        FontWeight="Medium"
-                    
-                        Text="{Binding CurrentView.Title}" />
-
-                    <!--  Time Display  -->
-                    <TextBlock
-                        Grid.Column="2"
-                        VerticalAlignment="Center"
-                        FontSize="14"
-                        Opacity="0.8"
-                        Text="{Binding CurrentDateTime}" />
+                <!--  Content Area with Light Theme Background  -->
+                <Grid Background="#F5F5F5">
+                    <!--  Dynamic Content  -->
+                    <ContentControl Margin="0" Content="{Binding CurrentView}" />
                 </Grid>
-            </materialDesign:ColorZone>
-
-            <!--  Content Area with Light Theme Background  -->
-            <Grid Background="#F5F5F5">
-                <!--  Dynamic Content  -->
-                <ContentControl Margin="0" Content="{Binding CurrentView}" />
-            </Grid>
-        </DockPanel>
-    </materialDesign:DrawerHost>
+            </DockPanel>
+        </materialDesign:DrawerHost>
     </materialDesign:DialogHost>
 </Window>
