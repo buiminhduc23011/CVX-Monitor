@@ -1,0 +1,130 @@
+<UserControl x:Class="CVX_QLSX.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="900"
+             Background="#F5F5F5">
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
+            <!-- Header -->
+            <TextBlock Text="Cài đặt" FontSize="28" FontWeight="Bold" Foreground="#1976D2" Margin="0,0,0,24"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Camera Connection Card -->
+                <materialDesign:Card Grid.Column="0" UniformCornerRadius="12" Margin="0,0,12,0"
+                                     Padding="20" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                            <materialDesign:PackIcon Kind="Camera" Width="28" Height="28" Foreground="#1976D2" VerticalAlignment="Center"/>
+                            <TextBlock Text="Kết nối Camera" FontSize="20" FontWeight="SemiBold" Foreground="#333" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <TextBox materialDesign:HintAssist.Hint="Địa chỉ IP"
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 Text="{Binding CameraIpAddress, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,0,0,16"/>
+
+                        <TextBox materialDesign:HintAssist.Hint="Cổng (Port)"
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 Text="{Binding CameraPort, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,0,0,16"/>
+
+                        <CheckBox Content="Tự động kết nối lại khi mất kết nối"
+                                  IsChecked="{Binding AutoReconnect}"
+                                  Margin="0,0,0,20"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Command="{Binding SaveSettingsCommand}"
+                                    Content="Lưu cài đặt"
+                                    Height="40" Padding="20,0"/>
+                            
+                            <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Command="{Binding TestConnectionCommand}"
+                                    Content="Kiểm tra kết nối"
+                                    Margin="12,0,0,0"
+                                    Height="40" Padding="20,0"/>
+                        </StackPanel>
+
+                        <TextBlock Text="{Binding TestConnectionResult}" 
+                                   Foreground="#666" Margin="0,16,0,0"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Product List Card -->
+                <materialDesign:Card Grid.Column="1" UniformCornerRadius="12" Margin="12,0,0,0"
+                                     Padding="20" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                            <materialDesign:PackIcon Kind="Package" Width="28" Height="28" Foreground="#43A047" VerticalAlignment="Center"/>
+                            <TextBlock Text="Danh sách Sản phẩm" FontSize="20" FontWeight="SemiBold" Foreground="#333" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Add Product Form -->
+                        <Grid Grid.Row="1" Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox materialDesign:HintAssist.Hint="Tên sản phẩm mới"
+                                     materialDesign:HintAssist.IsFloating="True"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Text="{Binding NewProduct, UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="0,0,12,0"/>
+
+                            <Button Grid.Column="1"
+                                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                                    Command="{Binding AddProductCommand}"
+                                    ToolTip="Thêm sản phẩm" Width="40" Height="40">
+                                <materialDesign:PackIcon Kind="Plus" Width="24" Height="24"/>
+                            </Button>
+                        </Grid>
+
+                        <!-- Product ListBox -->
+                        <ListBox Grid.Row="2"
+                                 ItemsSource="{Binding ProductList}"
+                                 SelectedItem="{Binding SelectedProduct}"
+                                 Style="{StaticResource MaterialDesignListBox}"
+                                 MinHeight="200">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                        <Button Grid.Column="1"
+                                                Style="{StaticResource MaterialDesignIconButton}"
+                                                Command="{Binding DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                Foreground="#E53935" Width="32" Height="32" ToolTip="Xóa">
+                                            <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </materialDesign:Card>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
